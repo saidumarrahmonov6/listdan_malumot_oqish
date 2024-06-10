@@ -46,8 +46,7 @@ class _MyAppState extends State<MyApp> {
             alignment: Alignment.center,
             width: 100,
             height: 80,
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+            decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(15)),
             child: Row(
               children: [
                 SizedBox(width: 20,),

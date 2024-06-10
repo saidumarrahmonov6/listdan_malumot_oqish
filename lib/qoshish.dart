@@ -3,7 +3,8 @@ import 'package:list_view_1/main.dart';
 
 class AddApp extends StatefulWidget {
   final oquvchilar;
-  const AddApp({super.key, required this.oquvchilar});
+  final ranglar;
+  const AddApp({super.key, required this.oquvchilar,required this.ranglar});
 
   @override
   State<AddApp> createState() => _AddAppState();
@@ -38,7 +39,9 @@ class _AddAppState extends State<AddApp> {
             onTap: (){
               List<String> oquv = widget.oquvchilar;
               oquv.add(ismtxt.text);
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>MyApp(oquvchilarList: oquv,)));
+              List<Color> rang = widget.ranglar;
+              rang.add(Colors.black);
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>MyApp(oquvchilarList: oquv, ranglar: rang,)));
             },
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),

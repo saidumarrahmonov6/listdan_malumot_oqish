@@ -1,26 +1,37 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:list_view_1/qoshish.dart';
 
 void main() {
   runApp(MaterialApp(
     home: MyApp(),
+    debugShowCheckedModeBanner: false,
   ));
 }
 
 class MyApp extends StatefulWidget {
   final oquvchilarList;
-  const MyApp({super.key, this.oquvchilarList,});
+  final ranglar;
+  const MyApp({super.key, this.oquvchilarList, this.ranglar,});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  List<String> oquvchilar=[];
+  TextEditingController edited = TextEditingController();
+  List<String> oquvchilar=[
+    "Alisher", "Ozod"
+  ];
+  List<Color> ranglar = [
+    Colors.black,
+    Colors.black,
+  ];
   @override
   void initState() {
     super.initState();
-    if(widget.oquvchilarList != null){
+    if(widget.oquvchilarList != null && widget.ranglar != null){
+      ranglar = widget.ranglar;
       oquvchilar = widget.oquvchilarList;
     }
   }
@@ -37,19 +48,102 @@ class _MyAppState extends State<MyApp> {
             height: 80,
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(15)),
-            child: Text(
-              oquvchilar[index],
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold),
+            child: Row(
+              children: [
+                SizedBox(width: 20,),
+                IconButton(
+                  onPressed: (){
+                    setState(() {
+                      if(ranglar[index] == Colors.black){
+                        ranglar[index] = Colors.yellow;
+                      } else if(ranglar[index] == Colors.yellow){
+                        ranglar[index] = Colors.black;
+                      }
+                    });
+                  },
+                  icon: Icon(Icons.star, size: 50, color: ranglar[index],),
+                ),
+                Expanded(
+                  child: Text(
+                    oquvchilar[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      showDialog(context: context, builder: (_)=>AlertDialog(
+                        title: Text("Rostdan ham o'chirasizmi"),
+                        actions: [
+                          TextButton(onPressed: (){
+                            oquvchilar.removeAt(index);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Muvafaqiyatli o'chirildi")));
+                            Navigator.pop(context);
+                            setState(() {});
+                          }, child: Text("Ha")),
+                          TextButton(onPressed: (){
+                            Navigator.pop(context);
+                          }, child: Text("Yo'q"))
+                        ],
+                      ));
+                    });
+                  },
+                    child: Icon(Icons.delete, size: 40,)),
+                SizedBox(width: 10,),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      edited = TextEditingController(text: oquvchilar[index]);
+                      showDialog(context: context, builder: (_)=> AlertDialog(
+                        title: Text("O'zgartirish"),
+                        actions: [
+                          TextField(
+                            controller: edited,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+                                oquvchilar[index] = edited.text;
+                                Navigator.pop(context);
+                                edited.clear();
+                              });
+                            },
+                            child: Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                color: Colors.green,
+                                  borderRadius: BorderRadius.circular(15)
+                                ),
+                                width: 300,
+                                height: 60,
+                                alignment: Alignment.center,
+                                child: Text("Saqlash", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),),
+                              ),
+                            ),
+                          )
+                        ],
+                      ));
+                    });
+                  },
+                    child: Icon(Icons.edit, size: 40,)),
+                SizedBox(width: 20,)
+              ],
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (_)=>AddApp(oquvchilar: oquvchilar,)));
+          Navigator.push(context, MaterialPageRoute(builder: (_)=>AddApp(oquvchilar: oquvchilar, ranglar: ranglar,)));
         },
         child: Icon(Icons.add),
       ),

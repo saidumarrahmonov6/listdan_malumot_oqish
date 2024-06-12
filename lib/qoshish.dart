@@ -37,11 +37,13 @@ class _AddAppState extends State<AddApp> {
           ),
           InkWell(
             onTap: (){
-              List<String> oquv = widget.oquvchilar;
-              oquv.add(ismtxt.text);
-              List<Color> rang = widget.ranglar;
-              rang.add(Colors.black);
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>MyApp(oquvchilarList: oquv, ranglar: rang,)));
+              if(ismtxt.text.length >= 3){
+                List<String> oquv = widget.oquvchilar;
+                oquv.add(katta(ismtxt.text));
+                List<Color> rang = widget.ranglar;
+                rang.add(Colors.black);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>MyApp(oquvchilarList: oquv, ranglar: rang,)));
+              }
             },
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
@@ -58,5 +60,10 @@ class _AddAppState extends State<AddApp> {
         ],
       ),
     );
+  }
+  katta(ism){
+    String bosh = ism.toString().substring(0, 1).toUpperCase();
+    String davomi = ism.toString().substring(1 , ism.toString().length);
+    return bosh + davomi;
   }
 }
